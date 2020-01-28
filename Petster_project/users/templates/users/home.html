@@ -1,25 +1,27 @@
 {% extends 'users/base.html' %}
 {% block content %}
-    <article class='media content-section'>
-      <div class='media-body'>
-        <div>
-          <b-card
-            title="Card Title"
-            img-src="https://picsum.photos/600/300/?image=28"
-            img-alt="Image"
-            img-top
-            tag="article"
-            style="max-width: 20rem;"
-            class="mb-2"
-          >
-            <b-card-text>
-            Some quick example text.
-            </b-card-text>
-            <b-button href="#" variant="primary">More</b-button>
-          </b-card>
-        </div>
-      </div>
-    </article>
+  <div class="card text-med bg-light mb-3">
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Active</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Link</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link disabled" href="#">Disabled</a>
+        </li> -->
+      </ul>
+    </div>
+    <div id="pet-img"> 
+      <img class="card-img" src="media/default.jpg" alt="Card image">
+      <!-- <div class="card-body">
+      </div> -->
+    </div>
+    <div class="card-footer">
+      <h5 class="card-title">Pet Name</h5><br>
+      <p class="card-text">With description of Pet, including size, weight, etc.</p>
+    </div>
+</div>
 {% endblock %}
-
-
