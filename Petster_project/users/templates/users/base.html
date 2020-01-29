@@ -60,38 +60,67 @@
                 <div class="col-md-4">
                     {% block content %} {% endblock %}
                 </div>
-                <div class="card-deck" v-for="result in results" :value="result.id">
-                    <pets v-if="Object.keys(results).length" v-bind:animal="results"></pets>
+
+                <!-- <div class="card-deck" v-for="result in results" :value="result.id">
+                    <pets v-if="Object.keys(results).length" v-bind:animal="result.data" v-bind:image="result.included[0].attributes.large.url"></pets>
+
+                    <div class="col-md-4"></div>
+                </div> -->
+
+                <div class="card-deck" v-for="result in results.data" :value="result.id">
+                    <pets v-if="Object.keys(results).length" v-bind:animal="result" v-bind:images="results.included">
+                    </pets>
+
+
+                    <div class="col-md-4"></div>
                 </div>
-                <div class="col-md-4"></div>
-            </div>
         </main>
-    </div>
-    <!-- Optional JavaScript -->
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js'></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-    </script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-    </script>
+        </div>
+        <!-- Optional JavaScript -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js'></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+        </script>
 
-    <!-- Importing axios and vue  -->
-    <script src="https://unpkg.com/vue"></script>
+        <!-- Importing axios and vue  -->
+        <script src="https://unpkg.com/vue"></script>
 
 
-    <script>
-        Vue.component('pets', {
-            props: ['animal'],
-            delimiters: ['[[', ']]'],
-            template: '#pets-template',
-            data: function() {
-                return {
-                    id: 1,
-                    text: "",
-                }
-            },
-            template: `
+        <script>
+            Vue.component('pets', {
+                props: ['animal', 'images'],
+                delimiters: ['[[', ']]'],
+                data: function() {
+                    return {
+                        //     id: 1,
+                        //     text: "",
+                    }
+                },
+                computed: {
+                    // pairing images to pets
+                    getImage: function() {
+                        // console.log('HELLO FROM COMPUTED')
+                        // console.log(this.animal.relationships.pictures.data)
+                        let image = ''
+                        let object = ''
+                        for (let picture of this.animal.relationships.pictures.data) {
+                            object = this.images.filter(item => item.id === picture.id)[0]
+
+                            // ^^^^^Need to: get this.animal....pictures....id and then filter the IMAGES by that id to return the url. 
+                            // console.log(this.images.filter(item => item.attributes.id === picture.id))
+                        }
+                        // object.push(filtered)
+                        image = object.attributes.large.url
+                            // console.log(image)
+                            // return 'https://s3.amazonaws.com/filestore.rescuegroups.org/871/pictures/animals/10013/10013063/34722686_500x333.jpg'
+                        return image
+                    }
+                },
+
+                template: `
                 <div class="card text-med bg-light mb-3">
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs">
@@ -107,67 +136,79 @@
                         </ul>
                     </div>
                     <div id="pet-img">
-                        <img class="card-img" src="animal.included.attributes.large.url" alt="image">
+                        <img class="card-img" :src="getImage">
                         <!-- <div class="card-body">
                     </div> -->
                     </div>
                     <div class="card-footer">
-                        <h5 class="card-title">[[animal.data.attributes.name]]</h5><br>
-                        <p class="card-text">[[animal.data.attributes.descriptionText]]</p>
+                        <h5 class="card-title">[[animal.attributes.name]]</h5><br>
+                        <p class="card-text">[[animal.attributes.descriptionText]]</p>
                     </div>
                 </div>
             `,
-        });
-        let: vm = new Vue({
-            el: '#app',
-            delimiters: ['[[', ']]'],
-            data: {
-                filters: [{
-                    fieldName: "statuses.name",
-                    operation: "equals",
-                    criteria: "Available"
-                }, {
-                    fieldName: "species.singular",
-                    operation: "equals",
-                    criteria: ["Cat", "Dog"],
-                }],
-                filterRadius: {
-                    miles: "10",
-                    postalcode: "97024",
+            });
+            let: vm = new Vue({
+                el: '#app',
+                delimiters: ['[[', ']]'],
+                data: {
+                    filters: [{
+                        fieldName: "statuses.name",
+                        operation: "equals",
+                        criteria: "Available"
+                    }, {
+                        fieldName: "species.singular",
+                        operation: "equals",
+                        criteria: "Cat"
+                    }, {
+                        fieldName: "species.singular",
+                        operation: "equals",
+                        criteria: "Dog"
+                    }],
+                    filterRadius: {
+                        miles: "10",
+                        postalcode: "97024",
+                    },
+                    results: [],
                 },
-                results: [],
-            },
 
 
-            methods: {
-                getPets: function() {
-                    axios
-                        .get(
-                            "https://api.rescuegroups.org/v5/public/animals/search/available/?include=pictures,species&fields[animals]=name,sex,breedPrimary,descriptionText,id,sizeGroup&fields[pictures]=large&fields[species]=singular", {
-                                headers: {
-                                    "Authorization": "iat0d2m0",
-                                    "content-type": "application/vnd.api+json"
-                                }
+                methods: {
+                    getPets: function() {
+                        axios
+                            .get(
+                                "https://api.rescuegroups.org/v5/public/animals/search/available/?include=pictures,species&fields[animals]=name,sex,breedPrimary,descriptionText,id,sizeGroup&fields[pictures]=large&fields[species]=singular", {
+                                    headers: {
+                                        "Authorization": "iat0d2m0",
+                                        "content-type": "application/vnd.api+json"
+                                    }
+                                })
+                            .then(res => {
+                                this.results = res.data
+                                    // console.log(this.results)
+                                    // console.log(this.results.included[0].attributes.large.url);
+                                    // console.log(this.results.data[0].attributes.name);
+                                    // console.log(this.results.data[0].attributes.descriptionText);
                             })
-                        .then(res => {
-                            this.results = res.data
-                            console.log(this.results.included[0].attributes.large.url);
-                        })
-                        .catch(error => {
-                            console.log(error)
-                            console.log("didnt get")
+                            .catch(error => {
+                                console.log(error)
+                                console.log("Didn't get")
 
-                            this.errored = true
-                        })
-                        .finally(() => this.loading = false)
-                }
-            },
-            mounted: function() {
-                this.getPets();
-            },
+                                this.errored = true
+                            })
+                            .finally(() => this.loading = false)
+                    }
+                },
+                computed: {
+                    petInfo: function() {
+                        return this.results;
+                    }
+                },
+                mounted: function() {
+                    this.getPets();
+                },
 
-        });
-    </script>
+            });
+        </script>
 </body>
 
 </html>
