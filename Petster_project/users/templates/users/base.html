@@ -56,26 +56,39 @@
         </header>
         <main role="main" class="container">
             <div class="row">
-                <div class="col-md-4"></div>
                 <div class="col-md-4">
-                    {% block content %} {% endblock %}
+                    <div id="stacked-cards-block" class="stackedcards stackedcards--animatable init" v-for="result in results.data" :value="result.id">
+                        <pets v-if="Object.keys(results).length" v-bind:animal="result" v-bind:images="results.included">
+                        </pets>
+                        <div class="stackedcards-container">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="card-image">
+                                        <img class="card-img" :src="getImage">
+                                    </div>
+                                    <div class="card-titles">
+                                        <h5 class="card-title">[[animal.attributes.name]]</h5><br>
+                                        <h6 class="card-title">[[animal.attributes.ageString]], [[animal.attributes.sex]]
+                                        </h6>
+                                    </div>
+                                    <div class="card-footer">
+                                        <p class="card-text">[[animal.attributes.descriptionText]]</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stackedcards--animatable stackedcards-overlay top">TOP</div>
+                    <div class="stackedcards--animatable stackedcards-overlay right">RIGHT</div>
+                    <div class="stackedcards--animatable stackedcards-overlay left">LEFT</div>
+                    <div class="global-actions">
+                        <div class="left-action">Left</div>
+                        <div class="top-action">Top</div>
+                        <div class="right-action">Right</div>
+                    </div>
                 </div>
-
-                <!-- <div class="card-deck" v-for="result in results" :value="result.id">
-                    <pets v-if="Object.keys(results).length" v-bind:animal="result.data" v-bind:image="result.included[0].attributes.large.url"></pets>
-
-                    <div class="col-md-4"></div>
-                </div> -->
-
-                <div class="card-deck" v-for="result in results.data" :value="result.id">
-                    <pets v-if="Object.keys(results).length" v-bind:animal="result" v-bind:images="results.included">
-                    </pets>
-
-
-                    <div class="col-md-4"></div>
-                </div>
+            </div>
         </main>
-        </div>
         <!-- Optional JavaScript -->
         <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js'></script>
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
@@ -109,43 +122,13 @@
                         for (let picture of this.animal.relationships.pictures.data) {
                             object = this.images.filter(item => item.id === picture.id)[0]
 
-                            // ^^^^^Need to: get this.animal....pictures....id and then filter the IMAGES by that id to return the url. 
-                            // console.log(this.images.filter(item => item.attributes.id === picture.id))
                         }
-                        // object.push(filtered)
                         image = object.attributes.large.url
                             // console.log(image)
-                            // return 'https://s3.amazonaws.com/filestore.rescuegroups.org/871/pictures/animals/10013/10013063/34722686_500x333.jpg'
                         return image
                     }
                 },
 
-                template: `
-                <div class="card text-med bg-light mb-3">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#">Active</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">Link</a>
-                            </li>
-                            <!-- <li class="nav-item">
-                                <a class="nav-link disabled" href="#">Disabled</a>
-                            </li> -->
-                        </ul>
-                    </div>
-                    <div id="pet-img">
-                        <img class="card-img" :src="getImage">
-                        <!-- <div class="card-body">
-                    </div> -->
-                    </div>
-                    <div class="card-footer">
-                        <h5 class="card-title">[[animal.attributes.name]]</h5><br>
-                        <p class="card-text">[[animal.attributes.descriptionText]]</p>
-                    </div>
-                </div>
-            `,
             });
             let: vm = new Vue({
                 el: '#app',
@@ -176,7 +159,7 @@
                     getPets: function() {
                         axios
                             .get(
-                                "https://api.rescuegroups.org/v5/public/animals/search/available/?include=pictures,species&fields[animals]=name,sex,breedPrimary,descriptionText,id,sizeGroup&fields[pictures]=large&fields[species]=singular", {
+                                "https://api.rescuegroups.org/v5/public/animals/search/available/?include=pictures,species&fields[animals]=name,sex,ageGroup,ageString,breedPrimary,descriptionText,id,sizeGroup&fields[pictures]=large&fields[species]=singular", {
                                     headers: {
                                         "Authorization": "iat0d2m0",
                                         "content-type": "application/vnd.api+json"

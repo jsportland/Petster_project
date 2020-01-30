@@ -3,20 +3,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     function stackedCards() {
 
-        var stackedOptions = 'Top'; // Change stacked cards view from 'Bottom', 'Top' or 'None'.
-        var rotate = true; // Activate the elements' rotation for each move on stacked cards.
-        var items = 3; // Number of visible elements when the stacked options are bottom or top.
-        var elementsMargin = 10; // Define the distance of each element when the stacked options are bottom or top.
-        var useOverlays = true; // Enable or disable the overlays for swipe elements.
-        var maxElements; // Total of stacked cards on DOM.
-        var currentPosition = 0; // Keep the position of active stacked card.
-        var velocity = 0.3; // Minimum velocity allowed to trigger a swipe.
-        var topObj; // Keep the swipe top properties.
-        var rightObj; // Keep the swipe right properties.
-        var leftObj; // Keep the swipe left properties.
-        var listElNodesObj; // Keep the list of nodes from stacked cards.
-        var listElNodesWidth; // Keep the stacked cards width.
-        var currentElementObj; // Keep the stacked card element to swipe.
+        var stackedOptions = 'Top'; //Change stacked cards view from 'Bottom', 'Top' or 'None'.
+        var rotate = true; //Activate the elements' rotation for each move on stacked cards.
+        var items = 3; //Number of visible elements when the stacked options are bottom or top.
+        var elementsMargin = 10; //Define the distance of each element when the stacked options are bottom or top.
+        var useOverlays = true; //Enable or disable the overlays for swipe elements.
+        var maxElements; //Total of stacked cards on DOM.
+        var currentPosition = 0; //Keep the position of active stacked card.
+        var velocity = 0.3; //Minimum velocity allowed to trigger a swipe.
+        var topObj; //Keep the swipe top properties.
+        var rightObj; //Keep the swipe right properties.
+        var leftObj; //Keep the swipe left properties.
+        var listElNodesObj; //Keep the list of nodes from stacked cards.
+        var listElNodesWidth; //Keep the stacked cards width.
+        var currentElementObj; //Keep the stacked card element to swipe.
         var stackedCardsObj;
         var isFirstTime = true;
         var elementHeight;
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         currentElementObj = listElNodesObj[0];
         updateUi();
 
-        // Prepare elements on DOM
+        //Prepare elements on DOM
         addMargin = elementsMargin * (items - 1) + 'px';
 
         if (stackedOptions === "Top") {
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             topObj.classList.add('stackedcards-overlay-hidden');
         }
 
-        // Remove class init
+        //Remove class init
         setTimeout(function() {
             obj.classList.remove('init');
         }, 150);
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             setZindex(5);
 
             if (!(currentPosition >= maxElements)) {
-                // Roll back the opacity of second element
+                //roll back the opacity of second element
                 if ((currentPosition + 1) < maxElements) {
                     listElNodesObj[currentPosition + 1].style.opacity = '.8';
                 }
@@ -137,12 +137,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         };
 
-        // Keep the active card.
+        //Keep the active card.
         function currentElement() {
             currentElementObj = listElNodesObj[currentPosition];
         };
 
-        // Functions to swipe left elements on logic external action.
+        //Functions to swipe left elements on logic external action.
         function onActionLeft() {
             if (!(currentPosition >= maxElements)) {
                 if (useOverlays) {
@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         };
 
-        // Functions to swipe right elements on logic external action.
+        //Functions to swipe right elements on logic external action.
         function onActionRight() {
             if (!(currentPosition >= maxElements)) {
                 if (useOverlays) {
@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         };
 
-        // Functions to swipe top elements on logic external action.
+        //Functions to swipe top elements on logic external action.
         function onActionTop() {
             if (!(currentPosition >= maxElements)) {
                 if (useOverlays) {
@@ -191,17 +191,17 @@ document.addEventListener("DOMContentLoaded", function(event) {
                 setTimeout(function() {
                     onSwipeTop();
                     resetOverlays();
-                }, 300); // Wait animations end
+                }, 300); //wait animations end
             }
         };
 
-        // Swipe active card to left.
+        //Swipe active card to left.
         function onSwipeLeft() {
             removeNoTransition();
             transformUi(-1000, 0, 0, currentElementObj);
             if (useOverlays) {
-                transformUi(-1000, 0, 0, leftObj); // Move leftOverlay
-                transformUi(-1000, 0, 0, topObj); // Move topOverlay
+                transformUi(-1000, 0, 0, leftObj); //Move leftOverlay
+                transformUi(-1000, 0, 0, topObj); //Move topOverlay
                 resetOverlayLeft();
             }
             currentPosition = currentPosition + 1;
@@ -210,13 +210,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
             setActiveHidden();
         };
 
-        // Swipe active card to right.
+        //Swipe active card to right.
         function onSwipeRight() {
             removeNoTransition();
             transformUi(1000, 0, 0, currentElementObj);
             if (useOverlays) {
-                transformUi(1000, 0, 0, rightObj); // Move rightOverlay
-                transformUi(1000, 0, 0, topObj); // Move topOverlay
+                transformUi(1000, 0, 0, rightObj); //Move rightOverlay
+                transformUi(1000, 0, 0, topObj); //Move topOverlay
                 resetOverlayRight();
             }
 
@@ -226,14 +226,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
             setActiveHidden();
         };
 
-        // Swipe active card to top.
+        //Swipe active card to top.
         function onSwipeTop() {
             removeNoTransition();
             transformUi(0, -1000, 0, currentElementObj);
             if (useOverlays) {
-                transformUi(0, -1000, 0, leftObj); // Move leftOverlay
-                transformUi(0, -1000, 0, rightObj); // Move rightOverlay
-                transformUi(0, -1000, 0, topObj); // Move topOverlay
+                transformUi(0, -1000, 0, leftObj); //Move leftOverlay
+                transformUi(0, -1000, 0, rightObj); //Move rightOverlay
+                transformUi(0, -1000, 0, topObj); //Move topOverlay
                 resetOverlays();
             }
 
@@ -243,7 +243,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             setActiveHidden();
         };
 
-        // Remove transitions from all elements to be moved in each swipe movement to improve perfomance of stacked cards.
+        //Remove transitions from all elements to be moved in each swipe movement to improve perfomance of stacked cards.
         function removeNoTransition() {
             if (listElNodesObj[currentPosition]) {
 
@@ -259,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         };
 
-        // Move the overlay left to initial position.
+        //Move the overlay left to initial position.
         function resetOverlayLeft() {
             if (!(currentPosition >= maxElements)) {
                 if (useOverlays) {
@@ -301,7 +301,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         };
 
-        // Move the overlay right to initial position.
+        //Move the overlay right to initial position.
         function resetOverlayRight() {
             if (!(currentPosition >= maxElements)) {
                 if (useOverlays) {
@@ -344,7 +344,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         };
 
-        // Move the overlays to initial position.
+        //Move the overlays to initial position.
         function resetOverlays() {
             if (!(currentPosition >= maxElements)) {
                 if (useOverlays) {
@@ -384,7 +384,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
                         });
 
-                    }, 300); // Wait for animations time
+                    }, 300); // wait for animations time
 
                     isFirstTime = false;
                 }
@@ -399,7 +399,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         };
 
-        // Set the new z-index for specific card.
+        //Set the new z-index for specific card.
         function setZindex(zIndex) {
             if (listElNodesObj[currentPosition]) {
                 listElNodesObj[currentPosition].style.zIndex = zIndex;
@@ -407,7 +407,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         };
 
         // Remove element from the DOM after swipe. To use this method you need to call this function in onSwipeLeft, onSwipeRight and onSwipeTop and put the method just above the variable 'currentPosition = currentPosition + 1'. 
-        // On the actions onSwipeLeft, onSwipeRight and onSwipeTop you need to remove the currentPosition variable (currentPosition = currentPosition + 1) and the function setActiveHidden
+        //On the actions onSwipeLeft, onSwipeRight and onSwipeTop you need to remove the currentPosition variable (currentPosition = currentPosition + 1) and the function setActiveHidden
 
         function removeElement() {
             currentElementObj.remove();
@@ -416,7 +416,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
         };
 
-        // Add translate X and Y to active card for each frame.
+        //Add translate X and Y to active card for each frame.
         function transformUi(moveX, moveY, opacity, elementObj) {
             requestAnimationFrame(function() {
                 var element = elementObj;
@@ -456,7 +456,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             });
         };
 
-        // Action to update all elements on the DOM for each stacked card.
+        //Action to update all elements on the DOM for each stacked card.
         function updateUi() {
             requestAnimationFrame(function() {
                 elTrans = 0;
@@ -514,7 +514,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         };
 
-        // Touch events block
+        //Touch events block
         var element = obj;
         var startTime;
         var startX;
@@ -634,7 +634,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             touchingElement = false;
 
             if (!(currentPosition >= maxElements)) {
-                if (translateY < (elementHeight * -1) && translateX > ((listElNodesWidth / 2) * -1) && translateX < (listElNodesWidth / 2)) { // Is Top?
+                if (translateY < (elementHeight * -1) && translateX > ((listElNodesWidth / 2) * -1) && translateX < (listElNodesWidth / 2)) { //is Top?
 
                     if (translateY < (elementHeight * -1) || (Math.abs(translateY) / timeTaken > velocity)) { // Did It Move To Top?
                         onSwipeTop();
@@ -667,7 +667,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         element.addEventListener('touchmove', gestureMove, false);
         element.addEventListener('touchend', gestureEnd, false);
 
-        // Add listeners to call global action for swipe cards
+        //Add listeners to call global action for swipe cards
         var buttonLeft = document.querySelector('.left-action');
         var buttonTop = document.querySelector('.top-action');
         var buttonRight = document.querySelector('.right-action');
