@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Required Meta Tags -->
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
+    <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+    <!-- Load Vue followed by BootstrapVue -->
+    <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- Load local stylesheet -->
+    <link rel="stylesheet" type="text/css" href="{% static 'Petster_project/main.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'Petster_project/favicon.ico' %}" /> {% if title %}
+    <title>Petster{{ title }}</title>
+    {% else %}
+    <title>Petster</title>
+    {% endif %}
+</head>
+
+<body>
+    <div id='app'>
+        <header class="site-header">
+            <nav class="navbar navbar-expand-md navbar-light bg-light">
+                <span class="navbar-brand mb-0 h1">
+                    <img class="card-img-top" src="media/logo-color.svg">
+                    <h6>Petster</h6>
+                </span>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'users:home' %}">Home <span
+                                    class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'users:about' %}">About </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Pet Type
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">All</a>
+                                <a class="dropdown-item" href="#">Cats</a>
+                                <a class="dropdown-item" href="#">Dogs</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div id="stacked-cards-block" class="stackedcards stackedcards--animatable init" v-for="result in results.data" :value="result.id">
+            <pets v-if="Object.keys(results).length" v-bind:animal="result" v-bind:images="results.included">
+            </pets>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js'></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+    </script>
+
+    <!-- Importing axios and vue  -->
+    <script src="https://unpkg.com/vue"></script>
+
+
+    <script>
+        Vue.component('pets', {
+            props: ['animal', 'images'],
+            delimiters: ['[[', ']]'],
+            data: function() {
+                return {
+                    //     id: 1,
+                    //     text: "",
+                }
+            },
+            template: `
+                        <main role="main" class="container">
+                            <div class="row">
+                                <div class="col-md-4">
+                                  
+                                        <div class="stackedcards-container">
+                                            <div class="card">
+                                                <div class="card-content">
+                                                    <div class="card-image">
+                                                        <img class="card-img" :src="getImage">
+                                                    </div>
+                                                    <div class="card-titles">
+                                                        <h5 class="card-title">[[animal.attributes.name]]</h5><br>
+                                                        <h6 class="card-title">[[animal.attributes.ageString]],
+                                                            [[animal.attributes.sex]]
+                                                        </h6>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <p class="card-text">[[animal.attributes.descriptionText]]</p>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                    <div class="stackedcards--animatable stackedcards-overlay top">TOP</div>
+                                    <div class="stackedcards--animatable stackedcards-overlay right">RIGHT</div>
+                                    <div class="stackedcards--animatable stackedcards-overlay left">LEFT</div>
+                                    <div class="global-actions">
+                                        <div class="left-action">Left</div>
+                                        <div class="top-action">Top</div>
+                                        <div class="right-action">Right</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+`,
+            computed: {
+                // pairing images to pets
+                getImage: function() {
+                    // console.log('HELLO FROM COMPUTED')
+                    // console.log(this.animal.relationships.pictures.data)
+                    let image = ''
+                    let object = ''
+                    for (let picture of this.animal.relationships.pictures.data) {
+                        object = this.images.filter(item => item.id === picture.id)[0]
+
+                    }
+                    image = object.attributes.large.url
+                        // console.log(image)
+                    return image
+                }
+            },
+
+        });
+        let: vm = new Vue({
+            el: '#app',
+            delimiters: ['[[', ']]'],
+            data: {
+                filters: [{
+                    fieldName: "statuses.name",
+                    operation: "equals",
+                    criteria: "Available"
+                }, {
+                    fieldName: "species.singular",
+                    operation: "equals",
+                    criteria: "Cat"
+                }, {
+                    fieldName: "species.singular",
+                    operation: "equals",
+                    criteria: "Dog"
+                }],
+                filterRadius: {
+                    miles: "10",
+                    postalcode: "97024",
+                },
+                results: [],
+            },
+
+
+            methods: {
+                getPets: function() {
+                    axios
+                        .get(
+                            "https://api.rescuegroups.org/v5/public/animals/search/available/?include=pictures,species&fields[animals]=name,sex,ageGroup,ageString,breedPrimary,descriptionText,id,sizeGroup&fields[pictures]=large&fields[species]=singular", {
+                                headers: {
+                                    "Authorization": "iat0d2m0",
+                                    "content-type": "application/vnd.api+json"
+                                }
+                            })
+                        .then(res => {
+                            this.results = res.data
+                                // console.log(this.results)
+                                // console.log(this.results.included[0].attributes.large.url);
+                                // console.log(this.results.data[0].attributes.name);
+                                // console.log(this.results.data[0].attributes.descriptionText);
+                        })
+                        .catch(error => {
+                            console.log(error)
+                            console.log("Didn't get")
+
+                            this.errored = true
+                        })
+                        .finally(() => this.loading = false)
+                }
+            },
+            computed: {
+                petInfo: function() {
+                    return this.results;
+                }
+            },
+            mounted: function() {
+                this.getPets();
+            },
+
+        });
+    </script>
+</body>
+
+</html>
