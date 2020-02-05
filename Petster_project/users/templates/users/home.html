@@ -1,25 +1,40 @@
-{% extends 'users/base.html' %} {% block content %}
-<!-- <div class="card text-med bg-light mb-3">
-    <div class="card-header">
-        <ul class="nav nav-tabs card-header-tabs">
-            <li class="nav-item">
-                <a class="nav-link active" href="#">Active</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li> 
-        </ul>
-    </div>
-    <div id="pet-img">
-    <img class="card-img" src="media/default.jpg" alt="Card image">
-    <div class="card-body">
+{% extends 'users/base.html' %} 
+{% block content %}
+  <div class="col d-flex justify-content-center container" id="app">
+      <div class="row">
+          <section>
+              <template id="carousel-template">
+                  <div id="petCarousel" class="carousel">
+                      <div class="carousel-inner" :perPage="1">
+                          <div class="carousel-item" v-for="(result, idx) in results.data"
+                              :class="{ active: idx==0 }" :value="result.id">
+                              <div class="col-md-12">
+                                  <div class="card" id="petCard" style="max-width: 100%;">
+                                      <pets v-if="Object.keys(result).length" v-bind:animal="result">
+                                      </pets>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </template>
+              <div class="container">
+                  <div class="row">
+                      <div class="col-xs-12 text-md-left lead">
+                          <a class="carousel-control-prev-icon prev" href="#petCarousel" role="button" @click="prevPage" data-slide="prev">
+                              <span><i class="fas fa-arrow-alt-circle-left" aria-hidden="true"></i></span>
+                              <span class="sr-only">Previous</span>
+                          </a>
+                      </div>
+                      <div class="col-xs-12 text-md-right lead">
+                          <a class="carousel-control-next-icon next" href="#petCarousel" role="button" @click="nextPage" data-slide="next">
+                              <span><i class="fas fa-arrow-alt-circle-right" aria-hidden="true"></i></span>
+                              <span class="sr-only">Next</span>
+                          </a>
+                      </div>
+                  </div>
+              </div>
+          </section>
       </div>
-    </div>
-    <div class="card-footer">
-    <h5 class="card-title">Pet Name</h5><br>
-      <p class="card-text">With description of Pet, including size, weight, etc.</p> 
-</div>
-</div> -->{% endblock %}
+  </div>
+{% endblock %}

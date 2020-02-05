@@ -33,6 +33,10 @@ ul {
     margin: 0;
 }
 
+.about-container {
+    padding-top: 75px;
+}
+
 .bg-steel {
     background-color: #765f8a;
 }
@@ -202,4 +206,9 @@ a:hover {
     align-items: center;
     border-radius: 10%;
     transition: transform 0.3s ease-in-out;
+}
+
+.description {
+    height: 200px;
+    overflow: auto;
 }
